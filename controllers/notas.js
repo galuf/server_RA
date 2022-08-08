@@ -3,13 +3,27 @@ const conexion = require("../database/config");
 const Nota = require("../models/nota");
 
 const postNotas = async (req, res = response) => {
-  const { body } = req;
+	
+	const { name, point } = req.body;
+  	console.log('points: ', point );
+  	try {
 
-  try {
-    //change with your last advance
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
+    //Generar la data a guardar
+    const data = {
+      usuario: name,
+      nota: point
+    };
+
+    const nota = new Nota(data);
+
+    //Guardar DB
+    await nota.save();
+
+    res.status(201).json(nota);
+  
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
       msg: "Hable con el administrador",
     });
   }
